@@ -54,7 +54,7 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={user ? <Navigate to={getHomeRoute(user)} /> : <Login />} />
+      <Route path="/login" element={<Login />} />
 
       <Route path="/admin" element={<AdminRoute />}>
         <Route index element={<AdminDashboard />} />
@@ -114,11 +114,6 @@ function AppRoutes() {
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
-}
-
-function getHomeRoute(user) {
-  if (user.role === 'superadmin') return '/admin';
-  return '/login';
 }
 
 export default function App() {

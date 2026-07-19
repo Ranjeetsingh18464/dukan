@@ -1,18 +1,24 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import Loading from '../../components/common/Loading';
 import toast from 'react-hot-toast';
-import { FiMail, FiLock, FiLogIn, FiUserPlus, FiBriefcase } from 'react-icons/fi';
+import { FiMail, FiLock, FiLogIn, FiBriefcase } from 'react-icons/fi';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, register, user, userShopSlug } = useAuth();
+  const { login, user, userShopSlug, loading: authLoading } = useAuth();
+
+  if (authLoading) return <Loading fullScreen />;
 
   if (user) {
     if (user.role === 'superadmin') return <Navigate to="/admin" replace />;
-    if (user.role === 'shopkeeper') return <Navigate to={userShopSlug ? `/shop/${userShopSlug}/dashboard` : '/login'} replace />;
+    if (user.role === 'shopkeeper') {
+      if (userShopSlug) return <Navigate to={`/shop/${userShopSlug}/dashboard`} replace />;
+      return <Loading fullScreen />;
+    }
     if (user.role === 'customer' && userShopSlug) return <Navigate to={`/shop/${userShopSlug}`} replace />;
     if (user.role === 'customer') return <Navigate to="/customer/shops" replace />;
   }
