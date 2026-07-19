@@ -1,0 +1,19 @@
+{
+  "name": "Dukan - Multi-Shop Marketplace",
+  "short_name": "Dukan",
+  "description": "Multi-Shop Marketplace Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4F46E5",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "business"]
+}
