@@ -20,43 +20,61 @@ export default function CustomerLayout({ children }) {
     { to: '/customer/shops', icon: FiBriefcase, label: 'Browse Shops' },
     { to: '/customer/my-orders', icon: FiPackage, label: 'My Orders' },
     { to: '/customer/wishlist', icon: FiHeart, label: 'Wishlist' },
-    { to: '/customer/cart', icon: FiShoppingBag, label: `Cart (${cartItems.length})` },
+    { to: '/customer/cart', icon: FiShoppingBag, label: 'Cart', badge: cartItems.length },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b sticky top-0 z-40">
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate(-1)} className="p-1.5 hover:bg-gray-100 rounded-lg"><FiArrowLeft className="w-4 h-4" /></button>
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><FiArrowLeft className="w-4 h-4" /></button>
             <Link to="/customer" className="font-bold text-lg text-indigo-600">Dukan</Link>
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1 ml-2">
               {links.map(link => (
-                <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'}`}>
-                  <link.icon className="inline w-4 h-4 mr-1" />{link.label}
+                <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => `px-3 py-1.5 rounded-xl text-sm font-medium transition-all relative ${isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'}`}>
+                  <link.icon className="inline w-4 h-4 mr-1.5" />{link.label}
+                  {link.badge > 0 && (
+                    <span className="ml-1 bg-indigo-600 text-white text-xs w-5 h-5 rounded-full inline-flex items-center justify-center">{link.badge}</span>
+                  )}
                 </NavLink>
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-xl px-3 py-1.5">
               <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-xs">{user?.email?.[0]?.toUpperCase() || '?'}</div>
               <span className="truncate max-w-[120px]">{user?.email}</span>
             </div>
-            <button onClick={handleLogout} className="text-sm text-red-600 hover:bg-red-50 px-2 py-1 rounded-lg hidden md:flex items-center gap-1"><FiLogOut /> Logout</button>
-            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2"><FiMenu /></button>
+            <button onClick={handleLogout} className="text-sm text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-xl hidden md:flex items-center gap-1.5 transition-colors font-medium">
+              <FiLogOut className="w-4 h-4" /> Logout
+            </button>
+            <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 hover:bg-gray-100 rounded-xl transition-colors">
+              {menuOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
-        {menuOpen && (
-          <div className="md:hidden border-t bg-white px-4 py-2 space-y-1">
+
+        {/* Mobile Menu with slide animation */}
+        <div className={`md:hidden border-t bg-white overflow-hidden transition-all duration-300 ease-out ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="px-4 py-3 space-y-1">
             {links.map(link => (
-              <NavLink key={link.to} to={link.to} end={link.end} onClick={() => setMenuOpen(false)} className={({ isActive }) => `block px-3 py-2 rounded-lg text-sm font-medium ${isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600'}`}>
-                <link.icon className="inline w-4 h-4 mr-2" />{link.label}
+              <NavLink key={link.to} to={link.to} end={link.end} onClick={() => setMenuOpen(false)} className={({ isActive }) => `flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-600 hover:bg-gray-50'}`}>
+                <span className="flex items-center gap-2">
+                  <link.icon className="w-4 h-4" />{link.label}
+                </span>
+                {link.badge > 0 && (
+                  <span className="bg-indigo-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">{link.badge}</span>
+                )}
               </NavLink>
             ))}
-            <button onClick={handleLogout} className="block w-full text-left px-3 py-2 text-sm text-red-600"><FiLogOut className="inline w-4 h-4 mr-2" />Logout</button>
+            <div className="border-t border-gray-100 pt-2 mt-2">
+              <button onClick={handleLogout} className="flex items-center gap-2 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-colors font-medium">
+                <FiLogOut className="w-4 h-4" />Logout
+              </button>
+            </div>
           </div>
-        )}
+        </div>
       </header>
       <main>{children}</main>
     </div>

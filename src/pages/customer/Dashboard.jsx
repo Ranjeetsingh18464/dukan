@@ -4,7 +4,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { formatCurrency, formatDate } from '../../utils/helpers';
-import { FiShoppingBag, FiClock, FiCheckCircle, FiPackage, FiHeart, FiBriefcase } from 'react-icons/fi';
+import { FiShoppingBag, FiClock, FiCheckCircle, FiPackage, FiHeart, FiBriefcase, FiArrowRight } from 'react-icons/fi';
 import { useCart } from '../../contexts/CartContext';
 import { useWishlist } from '../../contexts/WishlistContext';
 
@@ -45,80 +45,117 @@ export default function Dashboard() {
     cancelled: 'bg-red-100 text-red-800',
   };
 
+  const stats = [
+    { icon: FiShoppingBag, label: 'Total Orders', value: totalOrders, color: 'bg-indigo-50 text-indigo-600', to: '/customer/my-orders' },
+    { icon: FiClock, label: 'Pending', value: pendingOrders, color: 'bg-amber-50 text-amber-600' },
+    { icon: FiCheckCircle, label: 'Delivered', value: deliveredOrders, color: 'bg-emerald-50 text-emerald-600' },
+    { icon: FiPackage, label: 'Total Spent', value: formatCurrency(totalSpent), color: 'bg-purple-50 text-purple-600' },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Welcome, {user?.email}</h1>
-
-      <Link to="/customer/shops" className="flex items-center gap-3 bg-indigo-600 text-white rounded-xl px-5 py-4 mb-8 hover:bg-indigo-700 transition-colors">
-        <FiBriefcase className="w-5 h-5" />
-        <div>
-          <p className="font-semibold">Browse Shops</p>
-          <p className="text-indigo-200 text-xs">Discover products from all shops</p>
-        </div>
-      </Link>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Link to="/customer/my-orders" className="card hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center"><FiShoppingBag className="text-indigo-600" /></div>
-            <div><p className="text-xs text-gray-500">Total Orders</p><p className="text-xl font-bold">{totalOrders}</p></div>
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 md:p-8 text-white mb-8 animate-slide-up">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <p className="text-indigo-200 text-sm font-medium mb-1">Welcome back</p>
+            <h1 className="text-2xl md:text-3xl font-bold">{user?.email}</h1>
+            <p className="text-indigo-200 mt-1 text-sm">Manage your orders and discover new shops</p>
           </div>
-        </Link>
-        <div className="card">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center"><FiClock className="text-yellow-600" /></div>
-            <div><p className="text-xs text-gray-500">Pending</p><p className="text-xl font-bold">{pendingOrders}</p></div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"><FiCheckCircle className="text-green-600" /></div>
-            <div><p className="text-xs text-gray-500">Delivered</p><p className="text-xl font-bold">{deliveredOrders}</p></div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"><FiPackage className="text-purple-600" /></div>
-            <div><p className="text-xs text-gray-500">Total Spent</p><p className="text-xl font-bold">{totalSpent}</p></div>
-          </div>
+          <Link to="/customer/shops" className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white rounded-xl px-5 py-3 font-medium transition-all text-sm shrink-0">
+            <FiBriefcase className="w-4 h-4" /> Browse Shops <FiArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {stats.map((stat, i) => {
+          const Wrapper = stat.to ? Link : 'div';
+          return (
+            <Wrapper key={i} to={stat.to} className={`stat-card animate-slide-up animate-slide-up-delay-${i + 1} ${stat.to ? 'cursor-pointer hover:border-indigo-200' : ''}`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-11 h-11 ${stat.color} rounded-xl flex items-center justify-center shrink-0`}>
+                  <stat.icon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-gray-500 truncate">{stat.label}</p>
+                  <p className="text-xl font-bold truncate">{stat.value}</p>
+                </div>
+              </div>
+            </Wrapper>
+          );
+        })}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 animate-slide-up animate-slide-up-delay-3">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold">Recent Orders</h2>
-            <Link to="/customer/my-orders" className="text-sm text-indigo-600 hover:text-indigo-700">View All</Link>
+            <Link to="/customer/my-orders" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1">
+              View All <FiArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
           {recentOrders.length === 0 ? (
-            <div className="card text-center py-8 text-gray-400">No orders yet</div>
+            <div className="card text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FiPackage className="w-8 h-8 text-gray-300" />
+              </div>
+              <p className="text-gray-400 font-medium">No orders yet</p>
+              <p className="text-gray-300 text-sm mt-1">Your orders will appear here</p>
+              <Link to="/customer/shops" className="btn-primary mt-4 inline-flex items-center gap-2 text-sm">
+                <FiShoppingBag className="w-4 h-4" /> Start Shopping
+              </Link>
+            </div>
           ) : (
             <div className="space-y-3">
-              {recentOrders.map(order => (
-                <Link to={`/track/${order.id}`} key={order.id} className="card block hover:shadow-md transition-shadow">
-                  <div className="flex items-center justify-between mb-1">
+              {recentOrders.map((order, i) => (
+                <Link to={`/track/${order.id}`} key={order.id} className={`card block hover:shadow-md hover:border-indigo-200 transition-all animate-slide-up animate-slide-up-delay-${Math.min(i + 1, 5)}`}>
+                  <div className="flex items-center justify-between mb-1.5">
                     <span className="font-mono font-bold text-sm">{order.orderId}</span>
-                    <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${statusColors[order.status] || 'bg-gray-100'}`}>{order.status}</span>
+                    <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>{order.status}</span>
                   </div>
                   <div className="text-sm text-gray-500">{order.items?.length} item(s) — {formatDate(order.createdAt)}</div>
-                  <div className="font-bold mt-1">{formatCurrency(order.total)}</div>
+                  <div className="font-bold mt-1.5">{formatCurrency(order.total)}</div>
                 </Link>
               ))}
             </div>
           )}
         </div>
 
-        <div className="space-y-6">
-          <Link to="/customer/cart" className="card hover:shadow-md transition-shadow block">
+        <div className="space-y-4 animate-slide-up animate-slide-up-delay-4">
+          <Link to="/customer/cart" className="card hover:shadow-md hover:border-indigo-200 transition-all block">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center"><FiShoppingBag className="text-indigo-600" /></div>
-              <div><p className="text-sm font-semibold">My Cart</p><p className="text-xs text-gray-500">{cartItems.length} item(s)</p></div>
+              <div className="w-11 h-11 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
+                <FiShoppingBag className="w-5 h-5 text-indigo-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">My Cart</p>
+                <p className="text-xs text-gray-500">{cartItems.length} item(s)</p>
+              </div>
+              <FiArrowRight className="w-4 h-4 text-gray-300 ml-auto" />
             </div>
           </Link>
-          <Link to="/customer/wishlist" className="card hover:shadow-md transition-shadow block">
+          <Link to="/customer/wishlist" className="card hover:shadow-md hover:border-indigo-200 transition-all block">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center"><FiHeart className="text-red-600" /></div>
-              <div><p className="text-sm font-semibold">Wishlist</p><p className="text-xs text-gray-500">{wishlistItems.length} item(s)</p></div>
+              <div className="w-11 h-11 bg-rose-50 rounded-xl flex items-center justify-center shrink-0">
+                <FiHeart className="w-5 h-5 text-rose-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">Wishlist</p>
+                <p className="text-xs text-gray-500">{wishlistItems.length} item(s)</p>
+              </div>
+              <FiArrowRight className="w-4 h-4 text-gray-300 ml-auto" />
+            </div>
+          </Link>
+          <Link to="/customer/my-orders" className="card hover:shadow-md hover:border-indigo-200 transition-all block">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center shrink-0">
+                <FiPackage className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold">My Orders</p>
+                <p className="text-xs text-gray-500">View order history</p>
+              </div>
+              <FiArrowRight className="w-4 h-4 text-gray-300 ml-auto" />
             </div>
           </Link>
         </div>
