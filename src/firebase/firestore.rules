@@ -22,6 +22,10 @@ service cloud.firestore {
       return isShopkeeper() && getUserData().shopId == shopId;
     }
 
+    function isSameShop(shopId) {
+      return request.auth != null && getUserData().shopId == shopId;
+    }
+
     match /users/{userId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == userId;
@@ -42,29 +46,31 @@ service cloud.firestore {
     match /products/{productId} {
       allow read: if request.auth != null;
       allow create: if isShopkeeper();
-      allow update: if request.auth != null;
-      allow delete: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
+      allow update: if isShopkeeper() && isSameShop(resource.data.shopId);
+      allow delete: if isShopkeeper() && isSameShop(resource.data.shopId);
     }
 
     match /categories/{categoryId} {
       allow read: if request.auth != null;
       allow create: if isShopkeeper();
-      allow update: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
-      allow delete: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
+      allow update: if isShopkeeper() && isSameShop(resource.data.shopId);
+      allow delete: if isShopkeeper() && isSameShop(resource.data.shopId);
     }
 
     match /orders/{orderId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
-      allow update: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
-      allow delete: if request.auth != null && resource.data.customerId == request.auth.uid;
+      allow update: if isShopkeeper() && isSameShop(resource.data.shopId);
+      allow delete: if isSuperAdmin() ||
+        (isShopkeeper() && isSameShop(resource.data.shopId)) ||
+        (isCustomer() && resource.data.customerId == request.auth.uid);
     }
 
     match /coupons/{couponId} {
       allow read: if request.auth != null;
       allow create: if isShopkeeper();
-      allow update: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
-      allow delete: if isShopkeeper() && resource.data.shopId == getUserData().shopId;
+      allow update: if isShopkeeper() && isSameShop(resource.data.shopId);
+      allow delete: if isShopkeeper() && isSameShop(resource.data.shopId);
     }
 
     match /reviews/{reviewId} {
@@ -75,9 +81,9 @@ service cloud.firestore {
     }
 
     match /notifications/{notificationId} {
-      allow read: if request.auth != null;
+      allow read: if request.auth != null && isSameShop(resource.data.shopId);
       allow create: if request.auth != null;
-      allow update: if request.auth != null;
+      allow update: if request.auth != null && isSameShop(resource.data.shopId);
       allow delete: if isSuperAdmin();
     }
   }

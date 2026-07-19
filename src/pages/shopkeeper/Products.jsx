@@ -1,5 +1,5 @@
 import { useContext, useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import useProducts from '../../hooks/useProducts';
 import useCategories from '../../hooks/useCategories';
@@ -12,6 +12,7 @@ import { FiPlus, FiEdit, FiTrash2, FiGrid, FiList, FiTag, FiChevronUp, FiChevron
 import toast from 'react-hot-toast';
 
 export default function Products() {
+  const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const { products, loading } = useProducts(user?.shopId);
   const { categories } = useCategories(user?.shopId);
@@ -70,7 +71,7 @@ export default function Products() {
             <button onClick={() => setView('card')} className={`p-2 rounded-md transition-colors ${view === 'card' ? 'bg-white shadow text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}><FiGrid className="w-4 h-4" /></button>
             <button onClick={() => setView('list')} className={`p-2 rounded-md transition-colors ${view === 'list' ? 'bg-white shadow text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}><FiList className="w-4 h-4" /></button>
           </div>
-          <Link to="/dashboard/products/add" className="btn-primary flex items-center gap-2"><FiPlus /> Add Product</Link>
+          <Link to={`/shop/${slug}/dashboard/products/add`} className="btn-primary flex items-center gap-2"><FiPlus /> Add Product</Link>
         </div>
       </div>
       <div className="mb-4"><SearchBar value={search} onChange={setSearch} placeholder="Search by name, brand, category, size..." /></div>
@@ -122,7 +123,7 @@ export default function Products() {
                     <button onClick={() => moveProduct(index, -1)} disabled={index === 0} className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"><FiChevronUp className="w-3.5 h-3.5" /></button>
                     <button onClick={() => moveProduct(index, 1)} disabled={index === filtered.length - 1} className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"><FiChevronDown className="w-3.5 h-3.5" /></button>
                   </div>
-                  <Link to={`/dashboard/products/edit/${product.id}`} className="flex-1 text-center py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 flex items-center justify-center gap-1">
+                  <Link to={`/shop/${slug}/dashboard/products/edit/${product.id}`} className="flex-1 text-center py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 flex items-center justify-center gap-1">
                     <FiEdit className="w-3.5 h-3.5" /> Edit
                   </Link>
                   <button onClick={() => deleteProduct(product.id)} className="flex-1 text-center py-1.5 text-sm bg-red-50 hover:bg-red-100 rounded-lg text-red-600 flex items-center justify-center gap-1">
@@ -180,7 +181,7 @@ export default function Products() {
                     <div className="flex gap-1 items-center">
                       <button onClick={() => moveProduct(index, -1)} disabled={index === 0} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"><FiChevronUp /></button>
                       <button onClick={() => moveProduct(index, 1)} disabled={index === filtered.length - 1} className="p-2 hover:bg-gray-100 rounded-lg disabled:opacity-30 disabled:cursor-not-allowed"><FiChevronDown /></button>
-                      <Link to={`/dashboard/products/edit/${product.id}`} className="p-2 hover:bg-gray-100 rounded-lg text-indigo-600"><FiEdit /></Link>
+                      <Link to={`/shop/${slug}/dashboard/products/edit/${product.id}`} className="p-2 hover:bg-gray-100 rounded-lg text-indigo-600"><FiEdit /></Link>
                       <button onClick={() => deleteProduct(product.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-600"><FiTrash2 /></button>
                     </div>
                   </td>

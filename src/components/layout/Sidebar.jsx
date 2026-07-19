@@ -5,7 +5,7 @@ import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useState, useEffect } from 'react';
 
-export default function Sidebar({ role, isOpen, onClose }) {
+export default function Sidebar({ role, slug, isOpen, onClose }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [unreadCount, setUnreadCount] = useState(0);
@@ -23,6 +23,8 @@ export default function Sidebar({ role, isOpen, onClose }) {
     navigate('/login');
   }
 
+  const prefix = slug ? `/shop/${slug}/dashboard` : '/dashboard';
+
   const adminLinks = [
     { to: '/admin', icon: FiHome, label: 'Dashboard', end: true },
     { to: '/admin/shops', icon: FiBriefcase, label: 'Shops' },
@@ -34,33 +36,33 @@ export default function Sidebar({ role, isOpen, onClose }) {
     {
       title: null,
       links: [
-        { to: '/dashboard', icon: FiHome, label: 'Dashboard', end: true },
+        { to: prefix, icon: FiHome, label: 'Dashboard', end: true },
       ],
     },
     {
       title: 'SALES',
       links: [
-        { to: '/dashboard/orders/create', icon: FiFileText, label: 'Create Invoice' },
-        { to: '/dashboard/total-sale', icon: FiTrendingUp, label: 'Total Sale', end: true },
+        { to: `${prefix}/orders/create`, icon: FiFileText, label: 'Create Invoice' },
+        { to: `${prefix}/total-sale`, icon: FiTrendingUp, label: 'Total Sale', end: true },
       ],
     },
     {
       title: 'INVENTORY',
       links: [
-        { to: '/dashboard/products', icon: FiBox, label: 'Products' },
-        { to: '/dashboard/stock', icon: FiPackage, label: 'Stock', end: true },
-        { to: '/dashboard/orders', icon: FiDollarSign, label: 'Invoices', end: true },
-        { to: '/dashboard/purchase-orders', icon: FiTruck, label: 'Purchase Order', end: true },
-        { to: '/dashboard/total-purchase', icon: FiTrendingDown, label: 'Total Purchase', end: true },
-        { to: '/dashboard/purchase-orders/create', icon: FiFileText, label: 'Create Purchase Order' },
+        { to: `${prefix}/products`, icon: FiBox, label: 'Products' },
+        { to: `${prefix}/stock`, icon: FiPackage, label: 'Stock', end: true },
+        { to: `${prefix}/orders`, icon: FiDollarSign, label: 'Invoices', end: true },
+        { to: `${prefix}/purchase-orders`, icon: FiTruck, label: 'Purchase Order', end: true },
+        { to: `${prefix}/total-purchase`, icon: FiTrendingDown, label: 'Total Purchase', end: true },
+        { to: `${prefix}/purchase-orders/create`, icon: FiFileText, label: 'Create Purchase Order' },
       ],
     },
     {
       title: 'OTHER',
       links: [
-        { to: '/dashboard/qr-codes', icon: FiGrid, label: 'QR Codes' },
-        { to: '/dashboard/reports', icon: FiBarChart2, label: 'Reports' },
-        { to: '/dashboard/settings', icon: FiSettings, label: 'Settings' },
+        { to: `${prefix}/qr-codes`, icon: FiGrid, label: 'QR Codes' },
+        { to: `${prefix}/reports`, icon: FiBarChart2, label: 'Reports' },
+        { to: `${prefix}/settings`, icon: FiSettings, label: 'Settings' },
       ],
     },
   ];
@@ -124,6 +126,11 @@ export default function Sidebar({ role, isOpen, onClose }) {
               <p className="text-xs text-gray-400 capitalize">{role}</p>
             </div>
           </div>
+          {slug && role === 'shopkeeper' && (
+            <a href={`/shop/${slug}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-3 py-2.5 w-full text-sm text-indigo-600 hover:bg-indigo-50 rounded-lg mb-1">
+              <FiBriefcase className="w-5 h-5" /> View Shop
+            </a>
+          )}
           <button onClick={handleLogout} className="flex items-center gap-3 px-3 py-2.5 w-full text-sm text-red-600 hover:bg-red-50 rounded-lg">
             <FiLogOut className="w-5 h-5" /> Logout
           </button>

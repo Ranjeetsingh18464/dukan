@@ -11,7 +11,7 @@ import { FiSave, FiArrowLeft, FiPlus } from 'react-icons/fi';
 const UNITS = ['Kg', 'G', 'Mg', 'L', 'Ml', 'Pcs', 'Box', 'Pack', 'Dozen', 'Pair', 'Set', 'Bottle', 'Can', 'Bag', 'Roll'];
 
 export default function ProductForm() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const { categories } = useCategories(user?.shopId);
@@ -128,7 +128,7 @@ export default function ProductForm() {
         await addDoc(collection(db, 'products'), data);
         toast.success('Product added');
       }
-      navigate('/dashboard/products');
+      navigate(`/shop/${slug}/dashboard/products`);
     } catch (err) {
       toast.error(err.message);
     }

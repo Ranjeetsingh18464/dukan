@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 import { formatCurrency } from '../../utils/helpers';
 import QuantitySelector from '../../components/common/QuantitySelector';
@@ -6,6 +6,7 @@ import Empty from '../../components/common/Empty';
 import { FiTrash2, FiShoppingBag } from 'react-icons/fi';
 
 export default function Cart() {
+  const { slug } = useParams();
   const { items, removeItem, updateQuantity, getCartTotal, clearCart } = useCart();
 
   if (items.length === 0) return (
@@ -40,7 +41,7 @@ export default function Cart() {
         </div>
       </div>
       <div className="mt-6 text-right">
-        <Link to="/customer/checkout" className="btn-primary text-lg px-8">Proceed to Checkout</Link>
+        <Link to={`/shop/${slug}/checkout`} className="btn-primary text-lg px-8">Proceed to Checkout</Link>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import useProducts from '../../hooks/useProducts';
 import useOrders from '../../hooks/useOrders';
@@ -11,6 +11,7 @@ import ShareButtons from '../../components/common/ShareButtons';
 import { SkeletonDashboardCard } from '../../components/common/Skeleton';
 
 export default function Dashboard() {
+  const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const { products, loading: pLoading } = useProducts(user?.shopId);
   const { orders, loading: oLoading } = useOrders(user?.shopId);
@@ -46,10 +47,10 @@ export default function Dashboard() {
   ];
 
   const quickLinks = [
-    { to: '/dashboard/products', icon: FiBox, label: 'Manage Products', desc: 'Add, edit, or remove products' },
-    { to: '/dashboard/orders', icon: FiShoppingBag, label: 'View Orders', desc: `${pendingOrders} pending order(s)` },
-    { to: '/dashboard/invoices', icon: FiDollarSign, label: 'Create Invoice', desc: 'Generate new invoice' },
-    { to: '/dashboard/qr-codes', icon: FiTrendingUp, label: 'QR Codes', desc: 'Print shop QR codes' },
+    { to: `/shop/${slug}/dashboard/products`, icon: FiBox, label: 'Manage Products', desc: 'Add, edit, or remove products' },
+    { to: `/shop/${slug}/dashboard/orders`, icon: FiShoppingBag, label: 'View Orders', desc: `${pendingOrders} pending order(s)` },
+    { to: `/shop/${slug}/dashboard/orders`, icon: FiDollarSign, label: 'Create Invoice', desc: 'Generate new invoice' },
+    { to: `/shop/${slug}/dashboard/qr-codes`, icon: FiTrendingUp, label: 'QR Codes', desc: 'Print shop QR codes' },
   ];
 
   return (
@@ -118,7 +119,7 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-3">
               {[...orders].sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)).slice(0, 4).map(order => (
-                <Link key={order.id} to={`/dashboard/orders/${order.id}`} className="card block hover:shadow-md hover:border-indigo-200 transition-all !p-4">
+                <Link key={order.id} to={`/shop/${slug}/dashboard/orders/${order.id}`} className="card block hover:shadow-md hover:border-indigo-200 transition-all !p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-mono font-bold text-xs">{order.orderId}</p>

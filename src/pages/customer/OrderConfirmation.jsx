@@ -8,7 +8,7 @@ import Loading from '../../components/common/Loading';
 import { FiCheckCircle, FiMapPin } from 'react-icons/fi';
 
 export default function OrderConfirmation() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const [order, setOrder] = useState(null);
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,7 @@ export default function OrderConfirmation() {
       <div className="flex gap-3 justify-center flex-wrap mt-8">
         <Link to={`/track/${id}`} className="btn-primary flex items-center gap-2">Track Order</Link>
         {shop && <Link to={`/shop/${shop.slug}`} className="btn-secondary">Continue Shopping</Link>}
-        {order.customerId && <Link to="/customer/my-orders" className="btn-secondary">My Orders</Link>}
+        {order.customerId && <Link to={`/shop/${slug}/my-orders`} className="btn-secondary">My Orders</Link>}
       </div>
     </div>
   );

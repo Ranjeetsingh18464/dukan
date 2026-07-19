@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import useOrders from '../../hooks/useOrders';
 import { doc, updateDoc, collection, addDoc } from 'firebase/firestore';
@@ -13,6 +13,7 @@ import { FiEye, FiDownload, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 export default function Orders() {
+  const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const { orders, loading } = useOrders(user?.shopId);
   const [search, setSearch] = useState('');
@@ -89,7 +90,7 @@ export default function Orders() {
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-500">{formatDate(order.createdAt)}</td>
                   <td className="px-4 py-3">
-                    <Link to={`/dashboard/orders/${order.id}`} className="p-2 hover:bg-gray-100 rounded-lg text-indigo-600 inline-flex"><FiEye /></Link>
+                    <Link to={`/shop/${slug}/dashboard/orders/${order.id}`} className="p-2 hover:bg-gray-100 rounded-lg text-indigo-600 inline-flex"><FiEye /></Link>
                   </td>
                 </tr>
               ))}

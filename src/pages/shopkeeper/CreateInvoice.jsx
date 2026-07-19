@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import useProducts from '../../hooks/useProducts';
 import { collection, addDoc, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
@@ -11,6 +11,7 @@ import ShopHeader from '../../components/common/ShopHeader';
 
 export default function CreateInvoice() {
   const navigate = useNavigate();
+  const { slug } = useParams();
   const { user } = useContext(AuthContext);
   const { products } = useProducts(user?.shopId);
   const [loading, setLoading] = useState(false);
@@ -148,7 +149,7 @@ export default function CreateInvoice() {
       };
       await addDoc(collection(db, 'orders'), orderData);
       toast.success('Invoice created');
-      navigate('/dashboard/orders');
+      navigate(`/shop/${slug}/dashboard/orders`);
     } catch (err) {
       toast.error(err.message);
     }

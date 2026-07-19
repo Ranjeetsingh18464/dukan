@@ -1,4 +1,4 @@
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { FiHome, FiShoppingBag, FiHeart, FiPackage, FiLogOut, FiMenu, FiX, FiArrowLeft, FiBriefcase } from 'react-icons/fi';
@@ -9,18 +9,23 @@ export default function CustomerLayout({ children }) {
   const { items: cartItems } = useCart();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { slug } = useParams();
 
   async function handleLogout() {
     await logout();
     navigate('/login');
   }
 
-  const links = [
+  const shopPrefix = slug ? `/shop/${slug}` : null;
+
+  const links = shopPrefix ? [
+    { to: shopPrefix, icon: FiBriefcase, label: 'Shop Home', end: true },
+    { to: `${shopPrefix}/cart`, icon: FiShoppingBag, label: 'Cart', badge: cartItems.length },
+    { to: `${shopPrefix}/my-orders`, icon: FiPackage, label: 'My Orders' },
+    { to: `${shopPrefix}/wishlist`, icon: FiHeart, label: 'Wishlist' },
+  ] : [
     { to: '/customer', icon: FiHome, label: 'Dashboard', end: true },
     { to: '/customer/shops', icon: FiBriefcase, label: 'Browse Shops' },
-    { to: '/customer/my-orders', icon: FiPackage, label: 'My Orders' },
-    { to: '/customer/wishlist', icon: FiHeart, label: 'Wishlist' },
-    { to: '/customer/cart', icon: FiShoppingBag, label: 'Cart', badge: cartItems.length },
   ];
 
   return (
@@ -29,7 +34,7 @@ export default function CustomerLayout({ children }) {
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><FiArrowLeft className="w-4 h-4" /></button>
-            <Link to="/customer" className="font-bold text-lg text-indigo-600">Dukan</Link>
+            <Link to={shopPrefix || '/customer'} className="font-bold text-lg text-indigo-600">Dukan</Link>
             <nav className="hidden md:flex items-center gap-1 ml-2">
               {links.map(link => (
                 <NavLink key={link.to} to={link.to} end={link.end} className={({ isActive }) => `px-3 py-1.5 rounded-xl text-sm font-medium transition-all relative ${isActive ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'}`}>
@@ -55,7 +60,6 @@ export default function CustomerLayout({ children }) {
           </div>
         </div>
 
-        {/* Mobile Menu with slide animation */}
         <div className={`md:hidden border-t bg-white overflow-hidden transition-all duration-300 ease-out ${menuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="px-4 py-3 space-y-1">
             {links.map(link => (

@@ -1,5 +1,5 @@
 import { useState, useContext, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { collection, addDoc, doc, updateDoc, query, where, getDocs } from 'firebase/firestore';
@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { FiCreditCard, FiMapPin, FiPackage, FiArrowLeft, FiCheck, FiShoppingBag } from 'react-icons/fi';
 
 export default function Checkout() {
+  const { slug } = useParams();
   const { items, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ export default function Checkout() {
       });
 
       clearCart();
-      navigate(`/customer/order-confirmation/${orderRef.id}`);
+      navigate(`/shop/${slug}/order-confirmation/${orderRef.id}`);
       toast.success('Order placed!');
     } catch (err) {
       toast.error(err.message);

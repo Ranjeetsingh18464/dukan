@@ -361,7 +361,7 @@ export default function ShopHome() {
                   <span>Total</span>
                   <span>{formatCurrency(getCartTotal())}</span>
                 </div>
-                <Link to="/customer/checkout" onClick={() => setShowCart(false)} className="btn-primary block text-center w-full py-3 text-base">
+                <Link to={`/shop/${slug}/checkout`} onClick={() => setShowCart(false)} className="btn-primary block text-center w-full py-3 text-base">
                   Proceed to Checkout
                 </Link>
                 <button onClick={() => { clearCart(); setShowCart(false); }} className="text-sm text-red-500 hover:text-red-600 w-full text-center font-medium transition-colors">

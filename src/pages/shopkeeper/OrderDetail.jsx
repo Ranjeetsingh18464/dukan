@@ -8,7 +8,7 @@ import InvoicePrint from '../../components/common/InvoicePrint';
 import { FiArrowLeft, FiPhone, FiMessageCircle } from 'react-icons/fi';
 
 export default function OrderDetail() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const [order, setOrder] = useState(null);
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function OrderDetail() {
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <Link to="/dashboard/orders" className="p-2 hover:bg-gray-100 rounded-lg"><FiArrowLeft /></Link>
+          <Link to={`/shop/${slug}/dashboard/orders`} className="p-2 hover:bg-gray-100 rounded-lg"><FiArrowLeft /></Link>
           <div>
             <h1 className="text-2xl font-bold">{orderNo}</h1>
             <p className="text-sm text-gray-500">Placed on {formatDate(order.createdAt)}</p>
