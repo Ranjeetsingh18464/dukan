@@ -36,6 +36,7 @@ const ShopkeeperTotalSale = React.lazy(() => import('./pages/shopkeeper/TotalSal
 const ShopkeeperTotalPurchase = React.lazy(() => import('./pages/shopkeeper/TotalPurchase'));
 const ShopkeeperStock = React.lazy(() => import('./pages/shopkeeper/Stock'));
 const ShopkeeperQRCodes = React.lazy(() => import('./pages/shopkeeper/QRCodes'));
+const CustomerShopAuth = React.lazy(() => import('./pages/customer/ShopAuth'));
 const CustomerShopHome = React.lazy(() => import('./pages/customer/ShopHome'));
 const CustomerProductDetail = React.lazy(() => import('./pages/customer/ProductDetail'));
 const CustomerCart = React.lazy(() => import('./pages/customer/Cart'));
@@ -64,6 +65,7 @@ function AppRoutes() {
         <Route path="settings" element={<AdminSettings />} />
       </Route>
 
+      <Route path="/shop/:slug/auth" element={<CustomerShopAuth />} />
       <Route path="/shop/:slug" element={<CustomerShopHome />} />
       <Route path="/shop/:slug/product/:id" element={<CustomerProductDetail />} />
       <Route path="/track/:id" element={<CustomerOrderTracking />} />

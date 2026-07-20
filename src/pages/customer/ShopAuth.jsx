@@ -1,19 +1,38 @@
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 import Loading from '../../components/common/Loading';
 import toast from 'react-hot-toast';
-import { FiMail, FiLock, FiLogIn, FiUserPlus, FiBriefcase, FiUser } from 'react-icons/fi';
+import { FiMail, FiLock, FiLogIn, FiUserPlus, FiUser, FiBriefcase } from 'react-icons/fi';
 
-export default function Login() {
+export default function ShopAuth() {
+  const { slug } = useParams();
+  const { login, register, user, userShopSlug, loading: authLoading } = useAuth();
   const [isRegister, setIsRegister] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, register, user, userShopSlug, loading: authLoading } = useAuth();
+  const [shop, setShop] = useState(null);
+  const [shopLoading, setShopLoading] = useState(true);
 
-  if (authLoading) return <Loading fullScreen />;
+  useEffect(() => {
+    async function loadShop() {
+      try {
+        const snap = await getDoc(doc(db, 'shops', slug));
+        if (snap.exists()) setShop({ id: snap.id, ...snap.data() });
+      } catch (err) {
+        console.error('Failed to load shop:', err);
+      }
+      setShopLoading(false);
+    }
+    loadShop();
+  }, [slug]);
+
+  if (authLoading || shopLoading) return <Loading fullScreen />;
+  if (!shop) return <div className="min-h-screen flex items-center justify-center"><p className="text-gray-500">Shop not found</p></div>;
 
   if (user) {
     if (user.role === 'superadmin') return <Navigate to="/admin" replace />;
@@ -21,8 +40,7 @@ export default function Login() {
       if (userShopSlug) return <Navigate to={`/shop/${userShopSlug}/dashboard`} replace />;
       return <Loading fullScreen />;
     }
-    if (user.role === 'customer' && userShopSlug) return <Navigate to={`/shop/${userShopSlug}`} replace />;
-    if (user.role === 'customer') return <Navigate to="/customer/shops" replace />;
+    return <Navigate to={`/shop/${slug}`} replace />;
   }
 
   async function handleSubmit(e) {
@@ -30,14 +48,20 @@ export default function Login() {
     setLoading(true);
     try {
       if (isRegister) {
-        await register(email, password, 'customer', null, name);
-        toast.success('Account created! Welcome to Dukan.');
+        await register(email, password, 'customer', shop.id, name);
+        toast.success(`Welcome to ${shop.name}!`);
       } else {
         await login(email, password);
         toast.success('Logged in successfully');
       }
     } catch (err) {
-      toast.error(err.message || 'Failed');
+      if (err.code === 'auth/email-already-in-use') {
+        toast.error('Email already registered. Please sign in.');
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        toast.error('Invalid email or password');
+      } else {
+        toast.error(err.message || 'Failed');
+      }
     }
     setLoading(false);
   }
@@ -51,17 +75,18 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="gradient-primary text-white py-12 px-4 animate-fade-in">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium mb-4">
-            <FiBriefcase className="w-4 h-4" /> Multi-Shop Marketplace
+      <div className="gradient-primary text-white py-10 px-4 animate-fade-in">
+        <div className="max-w-md mx-auto text-center">
+          {shop.logo && <img src={shop.logo} alt={shop.name} className="w-16 h-16 rounded-2xl mx-auto mb-3 border-2 border-white/30 object-cover" />}
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-medium mb-3">
+            <FiBriefcase className="w-4 h-4" /> {shop.name}
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">Dukan</h1>
-          <p className="text-indigo-100 text-lg">One login for admins, shopkeepers, and customers</p>
+          <h1 className="text-2xl font-bold mb-1">{isRegister ? 'Join' : 'Welcome to'} {shop.name}</h1>
+          <p className="text-indigo-100 text-sm">{isRegister ? 'Create an account to start shopping' : 'Sign in to start shopping'}</p>
         </div>
       </div>
 
-      <div className="max-w-md mx-auto px-4 -mt-6 pb-16">
+      <div className="max-w-md mx-auto px-4 -mt-5 pb-16">
         <div className="card animate-slide-up">
           <div className="text-center mb-6">
             <div className="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
@@ -69,7 +94,7 @@ export default function Login() {
             </div>
             <h2 className="text-xl font-bold">{isRegister ? 'Create Account' : 'Sign In'}</h2>
             <p className="text-sm text-gray-500 mt-1">
-              {isRegister ? 'Register as a customer to start shopping' : 'Enter your credentials to access your account'}
+              {isRegister ? `Register to shop at ${shop.name}` : 'Enter your credentials to continue'}
             </p>
           </div>
 
@@ -112,37 +137,10 @@ export default function Login() {
             </button>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-xs text-gray-400 text-center mb-4">Your role determines where you're redirected after login</p>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center shrink-0">
-                  <FiLock className="w-3.5 h-3.5 text-indigo-600" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-700">Super Admin</p>
-                  <p className="text-xs text-gray-400">Full platform control</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center shrink-0">
-                  <FiBriefcase className="w-3.5 h-3.5 text-emerald-600" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-700">Shopkeeper</p>
-                  <p className="text-xs text-gray-400">Manage your assigned shop</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
-                  <FiUser className="w-3.5 h-3.5 text-amber-600" />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-gray-700">Customer</p>
-                  <p className="text-xs text-gray-400">{isRegister ? 'Register to start shopping' : 'Shop from your assigned store'}</p>
-                </div>
-              </div>
-            </div>
+          <div className="mt-4 text-center">
+            <Link to={`/shop/${slug}`} className="text-sm text-gray-400 hover:text-gray-600">
+              Browse {shop.name} without signing in
+            </Link>
           </div>
         </div>
       </div>

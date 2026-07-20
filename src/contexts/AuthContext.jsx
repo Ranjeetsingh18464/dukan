@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
               role: 'customer',
               createdAt: new Date(),
             };
-            await setDoc(doc(db, 'users', firebaseUser.uid), newUserData);
+            await setDoc(doc(db, 'users', firebaseUser.uid), newUserData, { merge: true });
             userData = newUserData;
           }
 
@@ -116,9 +116,9 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  async function register(email, password, role = 'customer', shopId = null) {
+  async function register(email, password, role = 'customer', shopId = null, name = '') {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, 'users', cred.user.uid), { email, role, shopId, createdAt: new Date() });
+    await setDoc(doc(db, 'users', cred.user.uid), { email, role, shopId, name, createdAt: new Date() }, { merge: true });
     return cred;
   }
 

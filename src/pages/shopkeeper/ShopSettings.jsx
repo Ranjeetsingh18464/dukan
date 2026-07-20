@@ -62,11 +62,11 @@ export default function ShopSettings() {
         <div className="card mb-6 text-center">
           <h2 className="font-semibold mb-3">Shop QR Code</h2>
           <div className="inline-block bg-white p-4 rounded-xl border-2 border-dashed border-gray-200">
-            <QRCodeSVG value={`${window.location.origin}/shop/${shop.slug}`} size={160} />
+            <QRCodeSVG value={`${window.location.origin}/shop/${shop.slug}/auth`} size={160} />
           </div>
-          <p className="text-xs text-gray-400 mt-2 break-all">{window.location.origin}/shop/{shop.slug}</p>
+          <p className="text-xs text-gray-400 mt-2 break-all">{window.location.origin}/shop/{shop.slug}/auth</p>
           <div className="mt-3 flex justify-center">
-            <ShareButtons url={`${window.location.origin}/shop/${shop.slug}`} title={shop.name || 'Shop'} />
+            <ShareButtons url={`${window.location.origin}/shop/${shop.slug}/auth`} title={shop.name || 'Shop'} />
           </div>
         </div>
       )}

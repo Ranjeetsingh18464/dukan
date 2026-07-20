@@ -21,7 +21,7 @@ export default function QRCodes() {
     load();
   }, [user?.shopId]);
 
-  const shopUrl = shop ? `${window.location.origin}/shop/${shop.slug}` : '';
+  const shopUrl = shop ? `${window.location.origin}/shop/${shop.slug}/auth` : '';
 
   function handlePrint() {
     const printWindow = window.open('', '_blank');
