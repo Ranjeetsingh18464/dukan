@@ -21,15 +21,17 @@ export default function Cart() {
       <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
       <div className="space-y-4 mb-6">
         {items.map(item => (
-          <div key={item.id} className="card flex items-center gap-4">
-            <img src={item.images?.[0] || ''} alt="" className="w-20 h-20 rounded-lg object-cover" />
+          <div key={item.id} className="card flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+            <img src={item.images?.[0] || ''} alt="" className="w-full sm:w-20 h-40 sm:h-20 rounded-lg object-cover" />
             <div className="flex-1">
               <h3 className="font-medium">{item.name}</h3>
               <p className="text-indigo-600 font-bold">{formatCurrency(item.price)}</p>
             </div>
-            <QuantitySelector value={item.quantity} onChange={(q) => updateQuantity(item.id, q)} />
-            <p className="font-bold w-24 text-right">{formatCurrency(item.price * item.quantity)}</p>
-            <button onClick={() => removeItem(item.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-500"><FiTrash2 /></button>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <QuantitySelector value={item.quantity} onChange={(q) => updateQuantity(item.id, q)} />
+              <p className="font-bold text-right min-w-[5rem]">{formatCurrency(item.price * item.quantity)}</p>
+              <button onClick={() => removeItem(item.id)} className="p-3 hover:bg-red-50 rounded-lg text-red-500"><FiTrash2 /></button>
+            </div>
           </div>
         ))}
       </div>
@@ -41,7 +43,7 @@ export default function Cart() {
         </div>
       </div>
       <div className="mt-6 text-right">
-        <Link to={`/shop/${slug}/checkout`} className="btn-primary text-lg px-8">Proceed to Checkout</Link>
+        <Link to={`/shop/${slug}/checkout`} className="btn-primary w-full sm:w-auto text-center">Proceed to Checkout</Link>
       </div>
     </div>
   );

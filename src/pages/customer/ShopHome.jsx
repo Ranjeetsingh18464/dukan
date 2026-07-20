@@ -1,26 +1,23 @@
-import { useState, useEffect, useContext } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useCart } from '../../contexts/CartContext';
 import { useWishlist } from '../../contexts/WishlistContext';
-import { useAuth } from '../../contexts/AuthContext';
 import { formatCurrency } from '../../utils/helpers';
 import { isShopOpen, getShopStatusText, getShopStatusColor } from '../../utils/shopUtils';
 import useRecentlyViewed from '../../hooks/useRecentlyViewed';
 import SearchBar from '../../components/common/SearchBar';
 import ImageLightbox from '../../components/common/ImageLightbox';
 import GoogleMapsEmbed from '../../components/common/GoogleMapsEmbed';
-import ShareButtons from '../../components/common/ShareButtons';
 import { SkeletonProductCard } from '../../components/common/Skeleton';
-import { FiHeart, FiShoppingCart, FiMapPin, FiClock, FiInfo, FiShare2, FiX, FiPlus, FiMinus, FiTrash2, FiSearch, FiPackage } from 'react-icons/fi';
+import { FiHeart, FiShoppingCart, FiMapPin, FiClock, FiInfo, FiX, FiPlus, FiMinus, FiTrash2, FiSearch, FiPackage } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 export default function ShopHome() {
   const { slug } = useParams();
-  const { user } = useAuth();
   const { toggleWishlist, isInWishlist } = useWishlist();
-  const { recent, addProduct } = useRecentlyViewed();
+  const { recent } = useRecentlyViewed();
   const [shop, setShop] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -65,6 +62,17 @@ export default function ShopHome() {
     }
     load();
   }, [slug]);
+
+  useEffect(() => {
+    const onOpenTracker = () => setShowTracker(true);
+    const onOpenCart = () => setShowCart(true);
+    window.addEventListener('shop:open-tracker', onOpenTracker);
+    window.addEventListener('shop:open-cart', onOpenCart);
+    return () => {
+      window.removeEventListener('shop:open-tracker', onOpenTracker);
+      window.removeEventListener('shop:open-cart', onOpenCart);
+    };
+  }, []);
 
   const shopOpen = shop ? isShopOpen(shop.openingHours) : true;
 
@@ -137,7 +145,7 @@ export default function ShopHome() {
       )}
 
       <div className="max-w-7xl mx-auto px-4">
-        <div className={`flex items-center gap-4 ${shop.banner ? '-mt-12 relative z-10' : 'pt-8'} mb-8 animate-slide-up`}>
+        <div className={`flex flex-wrap items-center gap-3 sm:gap-4 ${shop.banner ? '-mt-12 relative z-10' : 'pt-8'} mb-8 animate-slide-up`}>
           {shop.logo && <img src={shop.logo} alt="" className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg object-cover" />}
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg" style={shop.banner ? {} : { color: '#111827' }}>{shop.name}</h1>
@@ -148,18 +156,7 @@ export default function ShopHome() {
               {shop.phone && <span className="text-sm text-gray-500">{shop.phone}</span>}
             </div>
           </div>
-          <div className="ml-auto flex items-center gap-2">
-            <button onClick={() => setShowTracker(true)} className="p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-white/80 rounded-xl transition-all shadow-sm" title="Track Order">
-              <FiPackage className="w-5 h-5" />
-            </button>
-            <button onClick={() => setShowCart(true)} className="relative p-2.5 text-gray-600 hover:text-indigo-600 hover:bg-white/80 rounded-xl transition-all shadow-sm">
-              <FiShoppingCart className="w-5 h-5" />
-              {getItemCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold animate-pulse">{getItemCount()}</span>
-              )}
-            </button>
-            <ShareButtons url={window.location.href} title={shop.name} />
-          </div>
+
         </div>
 
         {shop.description && (

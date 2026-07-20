@@ -31,7 +31,7 @@ export default function PurchaseOrders() {
   return (
     <div>
         <h1 className="text-2xl font-bold">Purchase Orders</h1>
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="flex-1"><SearchBar value={search} onChange={setSearch} placeholder="Search by order ID or vendor name..." /></div>
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="input-field w-auto">
           <option value="">All Status</option>

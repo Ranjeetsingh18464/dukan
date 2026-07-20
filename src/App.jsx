@@ -12,6 +12,7 @@ import AdminRoute from './routes/AdminRoute';
 import ShopkeeperRoute from './routes/ShopkeeperRoute';
 import CustomerRoute from './routes/CustomerRoute';
 import ShopCustomerRoute from './routes/ShopCustomerRoute';
+import { ShopLayout } from './routes/ShopCustomerRoute';
 
 const Login = React.lazy(() => import('./pages/auth/Login'));
 const AdminDashboard = React.lazy(() => import('./pages/superadmin/Dashboard'));
@@ -66,8 +67,10 @@ function AppRoutes() {
       </Route>
 
       <Route path="/shop/:slug/auth" element={<CustomerShopAuth />} />
-      <Route path="/shop/:slug" element={<CustomerShopHome />} />
-      <Route path="/shop/:slug/product/:id" element={<CustomerProductDetail />} />
+      <Route element={<ShopLayout />}>
+        <Route path="/shop/:slug" element={<CustomerShopHome />} />
+        <Route path="/shop/:slug/product/:id" element={<CustomerProductDetail />} />
+      </Route>
       <Route path="/track/:id" element={<CustomerOrderTracking />} />
 
       <Route path="/shop/:slug/dashboard" element={<ShopkeeperRoute />}>

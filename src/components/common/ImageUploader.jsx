@@ -147,7 +147,7 @@ export default function ImageUploader({ onUpload, path, multiple = false, maxFil
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                 {searchResults.map((img, i) => (
                   <button
                     key={i}
@@ -173,8 +173,8 @@ export default function ImageUploader({ onUpload, path, multiple = false, maxFil
           {previews.map((url, i) => (
             <div key={i} className="relative group">
               <img src={url} alt="" className="w-20 h-20 object-cover rounded-lg" />
-              <button onClick={() => removePreview(url)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                <FiX className="w-3 h-3" />
+              <button onClick={() => removePreview(url)} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                <FiX className="w-4 h-4" />
               </button>
             </div>
           ))}

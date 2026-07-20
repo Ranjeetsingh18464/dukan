@@ -61,22 +61,22 @@ export default function MyOrders() {
         <div className="space-y-4">
           {orders.map((order, i) => (
             <div key={order.id} className="card hover:shadow-md hover:border-indigo-200 transition-all animate-slide-up" style={{ animationDelay: `${Math.min(i * 0.05, 0.3)}s` }}>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
                   <span className="font-mono font-bold text-sm">{order.orderId}</span>
-                  <span className="text-gray-300">|</span>
+                  <span className="text-gray-300 hidden sm:inline">|</span>
                   <span className="text-sm text-gray-500">{formatDate(order.createdAt)}</span>
                 </div>
-                <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
+                <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium self-start ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
                   {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
                 </span>
               </div>
               <div className="text-sm text-gray-500 mb-3 line-clamp-1">
                 {order.items?.length} item(s) — {order.items?.map(i => i.name).join(', ')}
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <span className="font-bold text-lg">{formatCurrency(order.total)}</span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs text-gray-400 capitalize bg-gray-50 px-2.5 py-1 rounded-lg">{order.paymentMethod}</span>
                   <Link to={`/track/${order.id}`} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1 transition-colors">
                     Track <FiArrowRight className="w-3 h-3" />

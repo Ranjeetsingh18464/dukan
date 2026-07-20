@@ -1,1 +1,0 @@
-import{F as e,ut as t}from"./index-KHF7ggIj.js";var n=t();function r({message:t=`No data found`,icon:r=e}){return(0,n.jsxs)(`div`,{className:`flex flex-col items-center justify-center py-16 text-gray-400`,children:[(0,n.jsx)(r,{className:`w-16 h-16 mb-4`}),(0,n.jsx)(`p`,{className:`text-lg`,children:t})]})}export{r as t};

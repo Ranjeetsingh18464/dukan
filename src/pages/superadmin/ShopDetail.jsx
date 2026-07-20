@@ -36,7 +36,7 @@ export default function ShopDetail() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold">{shop.name}</h1>
         <div className="flex gap-2">
           <Link to={`/shop/${shop.slug}`} target="_blank" className="btn-secondary flex items-center gap-2"><FiExternalLink /> View Shop</Link>

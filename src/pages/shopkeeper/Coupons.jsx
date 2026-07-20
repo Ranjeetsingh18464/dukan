@@ -70,9 +70,9 @@ export default function Coupons() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold">Coupons</h1>
-        <button onClick={openCreate} className="btn-primary flex items-center gap-2"><FiPlus /> Add Coupon</button>
+        <button onClick={() => setShowModal(true)} className="btn-primary flex items-center gap-2"><FiPlus /> Add Coupon</button>
       </div>
       {coupons.length === 0 ? (
         <Empty message="No coupons yet" />
@@ -117,7 +117,7 @@ export default function Coupons() {
             <label className="label">Code</label>
             <input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} className="input-field font-mono" required />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label">Type</label>
               <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="input-field">

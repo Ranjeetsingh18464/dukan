@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import Loading from '../../components/common/Loading';
 import toast from 'react-hot-toast';
@@ -21,8 +21,9 @@ export default function ShopAuth() {
   useEffect(() => {
     async function loadShop() {
       try {
-        const snap = await getDoc(doc(db, 'shops', slug));
-        if (snap.exists()) setShop({ id: snap.id, ...snap.data() });
+        const q = query(collection(db, 'shops'), where('slug', '==', slug));
+        const snap = await getDocs(q);
+        if (!snap.empty) setShop({ id: snap.docs[0].id, ...snap.docs[0].data() });
       } catch (err) {
         console.error('Failed to load shop:', err);
       }

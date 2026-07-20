@@ -152,7 +152,7 @@ export default function ProductForm() {
           <label className="label">Description</label>
           <textarea name="description" value={form.description} onChange={handleChange} className="input-field" rows={3} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Brand</label>
             <input name="brand" value={form.brand} onChange={handleChange} className="input-field" placeholder="e.g. Nike, Samsung" />
@@ -193,7 +193,7 @@ export default function ProductForm() {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="label">Size</label>
             <input name="size" value={form.size} onChange={handleChange} className="input-field" placeholder="e.g. 500, XL" />
@@ -209,7 +209,7 @@ export default function ProductForm() {
             <input name="stock" type="number" value={form.stock} onChange={handleChange} className="input-field" placeholder="Blank = unlimited" />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="label">MRP (₹)</label>
             <input name="mrp" type="number" step="0.01" value={form.mrp} onChange={handleChange} className="input-field" placeholder="Original price" />

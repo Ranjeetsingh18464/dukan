@@ -38,7 +38,7 @@ export default function ShopHeader() {
   return (
     <div className="card mb-4">
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
           {shop.logo && <img src={shop.logo} alt="" className="w-12 h-12 rounded-lg object-cover" />}
           <div>
             {editing ? (
@@ -56,11 +56,11 @@ export default function ShopHeader() {
         </div>
         {editing ? (
           <div className="flex gap-2">
-            <button type="button" onClick={handleSave} className="p-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"><FiSave className="w-4 h-4" /></button>
-            <button type="button" onClick={() => { setEditing(false); setForm({ name: shop.name || '', address: shop.address || '', phone: shop.phone || '' }); }} className="p-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100"><FiX className="w-4 h-4" /></button>
+            <button type="button" onClick={handleSave} className="p-2.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"><FiSave className="w-4 h-4" /></button>
+            <button type="button" onClick={() => { setEditing(false); setForm({ name: shop.name || '', address: shop.address || '', phone: shop.phone || '' }); }} className="p-2.5 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100"><FiX className="w-4 h-4" /></button>
           </div>
         ) : (
-          <button type="button" onClick={() => setEditing(true)} className="p-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"><FiEdit3 className="w-4 h-4" /></button>
+          <button type="button" onClick={() => setEditing(true)} className="p-2.5 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100"><FiEdit3 className="w-4 h-4" /></button>
         )}
       </div>
     </div>

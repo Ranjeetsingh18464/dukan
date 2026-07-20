@@ -2,7 +2,8 @@ import { NavLink, Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useCart } from '../../contexts/CartContext';
 import { FiHome, FiShoppingBag, FiHeart, FiPackage, FiLogOut, FiMenu, FiX, FiArrowLeft, FiBriefcase } from 'react-icons/fi';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import ShareButtons from '../common/ShareButtons';
 
 export default function CustomerLayout({ children }) {
   const { user, logout } = useAuth();
@@ -20,13 +21,21 @@ export default function CustomerLayout({ children }) {
 
   const links = shopPrefix ? [
     { to: shopPrefix, icon: FiBriefcase, label: 'Shop Home', end: true },
-    { to: `${shopPrefix}/cart`, icon: FiShoppingBag, label: 'Cart', badge: cartItems.length },
+    { to: '/customer/shops', icon: FiBriefcase, label: 'Browse Shops' },
     { to: `${shopPrefix}/my-orders`, icon: FiPackage, label: 'My Orders' },
     { to: `${shopPrefix}/wishlist`, icon: FiHeart, label: 'Wishlist' },
   ] : [
     { to: '/customer', icon: FiHome, label: 'Dashboard', end: true },
     { to: '/customer/shops', icon: FiBriefcase, label: 'Browse Shops' },
   ];
+
+  const openTracker = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('shop:open-tracker'));
+  }, []);
+
+  const openCart = useCallback(() => {
+    window.dispatchEvent(new CustomEvent('shop:open-cart'));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -46,7 +55,23 @@ export default function CustomerLayout({ children }) {
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            {shopPrefix && (
+              <>
+                <button onClick={openTracker} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500 hover:text-indigo-600" title="Track Order">
+                  <FiPackage className="w-4.5 h-4.5" />
+                </button>
+                <button onClick={openCart} className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500 hover:text-indigo-600" title="Cart">
+                  <FiShoppingBag className="w-4.5 h-4.5" />
+                  {cartItems.length > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 bg-indigo-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">{cartItems.length > 9 ? '9+' : cartItems.length}</span>
+                  )}
+                </button>
+                <div className="hidden sm:block">
+                  <ShareButtons url={typeof window !== 'undefined' ? window.location.href : ''} title={slug || 'Shop'} />
+                </div>
+              </>
+            )}
             <div className="hidden md:flex items-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-xl px-3 py-1.5">
               <div className="w-7 h-7 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold text-xs">{user?.email?.[0]?.toUpperCase() || '?'}</div>
               <span className="truncate max-w-[120px]">{user?.email}</span>
@@ -72,6 +97,17 @@ export default function CustomerLayout({ children }) {
                 )}
               </NavLink>
             ))}
+            {shopPrefix && (
+              <div className="flex items-center gap-2 px-3 py-2">
+                <button onClick={() => { openTracker(); setMenuOpen(false); }} className="flex items-center gap-2 text-sm text-gray-600 hover:text-indigo-600 py-1">
+                  <FiPackage className="w-4 h-4" /> Track Order
+                </button>
+                <span className="text-gray-300">|</span>
+                <div className="sm:hidden">
+                  <ShareButtons url={typeof window !== 'undefined' ? window.location.href : ''} title={slug || 'Shop'} />
+                </div>
+              </div>
+            )}
             <div className="border-t border-gray-100 pt-2 mt-2">
               <button onClick={handleLogout} className="flex items-center gap-2 w-full px-3 py-2.5 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-colors font-medium">
                 <FiLogOut className="w-4 h-4" />Logout

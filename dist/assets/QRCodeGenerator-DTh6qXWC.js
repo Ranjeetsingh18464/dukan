@@ -1,1 +1,0 @@
-import{ut as e}from"./index-KHF7ggIj.js";import{t}from"./esm-d6EPiaNl.js";var n=e();function r({value:e,size:r=128,title:i}){return(0,n.jsxs)(`div`,{className:`flex flex-col items-center gap-2`,children:[(0,n.jsx)(t,{value:e,size:r}),i&&(0,n.jsx)(`p`,{className:`text-sm text-gray-500`,children:i})]})}export{r as t};

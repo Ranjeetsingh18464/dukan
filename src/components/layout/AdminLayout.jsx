@@ -14,7 +14,7 @@ export default function AdminLayout() {
           <button onClick={() => setSidebarOpen(true)}><FiMenu className="w-6 h-6" /></button>
           <h1 className="font-bold text-lg">Admin Panel</h1>
         </header>
-        <main className="p-6"><Outlet /></main>
+        <main className="p-4 md:p-6"><Outlet /></main>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export default function Reports() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Reports</h1>
-      <div className="flex gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <div>
           <label className="label">From</label>
           <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="input-field" />

@@ -23,18 +23,20 @@ export default function Wishlist() {
       ) : (
         <div className="space-y-4">
           {items.map(item => (
-            <div key={item.id} className="card flex items-center gap-4">
-              <img src={item.images?.[0] || ''} alt="" className="w-20 h-20 rounded-lg object-cover" />
+            <div key={item.id} className="card flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              <img src={item.images?.[0] || ''} alt="" className="w-full sm:w-20 h-40 sm:h-20 rounded-lg object-cover" />
               <div className="flex-1">
                 <h3 className="font-medium">{item.name}</h3>
                 <p className="text-indigo-600 font-bold">{formatCurrency(item.price)}</p>
               </div>
-              <button onClick={() => addToCart(item)} className="btn-primary flex items-center gap-2 text-sm">
-                <FiShoppingCart /> Add to Cart
-              </button>
-              <button onClick={() => removeItem(item.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-500">
-                <FiTrash2 />
-              </button>
+              <div className="flex items-center gap-3">
+                <button onClick={() => addToCart(item)} className="btn-primary flex items-center gap-2 text-sm">
+                  <FiShoppingCart /> Add to Cart
+                </button>
+                <button onClick={() => removeItem(item.id)} className="p-3 hover:bg-red-50 rounded-lg text-red-500">
+                  <FiTrash2 />
+                </button>
+              </div>
             </div>
           ))}
         </div>

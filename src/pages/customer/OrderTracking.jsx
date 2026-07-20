@@ -73,7 +73,7 @@ export default function OrderTracking() {
       </div>
 
       <div className="card animate-slide-up animate-slide-up-delay-2">
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
             <FiCalendar className="w-4 h-4 text-gray-400" />
             <div>

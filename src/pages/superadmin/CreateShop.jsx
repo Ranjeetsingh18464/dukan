@@ -75,7 +75,7 @@ export default function CreateShop() {
           <label className="label">Shop URL Slug</label>
           <input name="shopSlug" value={form.shopSlug} onChange={handleChange} className="input-field bg-gray-50" readOnly />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Shopkeeper Email</label>
             <input name="email" type="email" value={form.email} onChange={handleChange} className="input-field" required />

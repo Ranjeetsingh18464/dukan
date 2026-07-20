@@ -4,12 +4,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: 'AIzaSyAjArkX1g51RNEEypTl3acvMi5olWjy1KQ',
+  authDomain: 'indiamart-3f534.firebaseapp.com',
+  projectId: 'indiamart-3f534',
+  storageBucket: 'indiamart-3f534.firebasestorage.app',
+  messagingSenderId: '560364967658',
+  appId: '1:560364967658:web:fd35fde871bceb5882a993',
 };
 
 const app = initializeApp(firebaseConfig);

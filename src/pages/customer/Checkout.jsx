@@ -107,7 +107,7 @@ export default function Checkout() {
       </button>
       <h1 className="text-2xl font-bold mb-6 animate-slide-up">Checkout</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
         <form onSubmit={handleSubmit} className="lg:col-span-3 card space-y-5 animate-slide-up animate-slide-up-delay-1">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <div className="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center"><FiPackage className="w-4 h-4 text-indigo-600" /></div>

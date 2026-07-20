@@ -80,7 +80,7 @@ export default function ShopSettings() {
           <label className="label">Description</label>
           <textarea name="description" value={form.description || ''} onChange={handleChange} className="input-field" rows={3} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Phone</label>
             <input name="phone" value={form.phone || ''} onChange={handleChange} className="input-field" />
@@ -108,7 +108,7 @@ export default function ShopSettings() {
           <ImageUploader onUpload={(url) => setForm(prev => ({ ...prev, banner: url }))} path={`shops/${user.shopId}/banner`} />
           {form.banner && <img src={form.banner} alt="Banner" className="w-full h-40 mt-2 rounded-lg object-cover" />}
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Facebook</label>
             <input name="socialLinks.facebook" value={form.socialLinks?.facebook || ''} onChange={(e) => setForm(prev => ({ ...prev, socialLinks: { ...prev.socialLinks, facebook: e.target.value } }))} className="input-field" />

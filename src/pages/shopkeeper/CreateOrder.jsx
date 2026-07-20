@@ -157,17 +157,17 @@ export default function CreateOrder() {
 
   return (
     <div className="max-w-3xl">
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-6">
         <button onClick={() => navigate(-1)} className="p-2 hover:bg-gray-100 rounded-lg"><FiArrowLeft /></button>
-        <h1 className="text-2xl font-bold">Create Purchase Order</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Create Purchase Order</h1>
         <span className="text-sm text-gray-500 ml-auto font-medium">Order No <input type="text" value={purchaseOrderNum} onChange={(e) => setPurchaseOrderNum(e.target.value)} className="w-16 text-center border-b border-gray-300 focus:border-indigo-500 outline-none font-medium text-gray-700" /></span>
-        <span className="text-sm text-gray-500">{new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+        <span className="text-sm text-gray-500 hidden sm:inline">{new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <ShopHeader />
         <div className="card">
           <h2 className="font-semibold mb-3">Vendor Details</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label">Vendor Name</label>
               <input name="vendorName" value={form.vendorName} onChange={handleFormChange} className="input-field" required />
@@ -226,7 +226,7 @@ export default function CreateOrder() {
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-3">
           <button type="submit" disabled={loading} className="btn-primary flex items-center gap-2">
             <FiSave /> {loading ? 'Creating...' : 'Create Purchase Order'}
           </button>

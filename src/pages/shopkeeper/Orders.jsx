@@ -45,13 +45,13 @@ export default function Orders() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <h1 className="text-2xl font-bold">Invoices</h1>
         <div className="flex items-center gap-3">
           <button onClick={handleExport} className="btn-secondary flex items-center gap-2"><FiDownload /> Export CSV</button>
         </div>
       </div>
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="flex-1"><SearchBar value={search} onChange={setSearch} placeholder="Search orders..." /></div>
         <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="input-field w-auto">
           <option value="">All Status</option>
